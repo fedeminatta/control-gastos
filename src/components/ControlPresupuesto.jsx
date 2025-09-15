@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import { RotateCcw, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 import 'react-circular-progressbar/dist/styles.css';
 
 const ControlPresupuesto = ({
@@ -52,31 +53,69 @@ const ControlPresupuesto = ({
   };
 
   return (
-    <div className="contenedor-presupuesto contenedor sombra dos-columnas">
-      <div>
-        <CircularProgressbar
-          value={porcentaje}
-          styles={buildStyles({
-            pathColor: porcentaje > 100 ? '#DC2626' : '#d4a257',
-            trailColor: '#f5f5f5',
-            textColor: porcentaje > 100 ? '#DC2626' : '#d4a257',
-          })}
-          text={`${porcentaje}% Gastado`}
-        />
-      </div>
-      <div className="contenido-presupuesto">
-        <button className="reset-app" type="button" onClick={handleResetApp}>
-          Resetear App
-        </button>
-        <p>
-          <span>Presupuesto: </span> {formatearCantidad(presupuesto)}
-        </p>
-        <p className={`${disponible < 0 ? 'negativo' : ''}`}>
-          <span>Disponible: </span> {formatearCantidad(disponible)}
-        </p>
-        <p>
-          <span>Gastado: </span> {formatearCantidad(gastado)}
-        </p>
+    <div className="max-w-6xl mx-auto">
+      <div className="card p-8">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="flex justify-center">
+            <div className="w-64 h-64">
+              <CircularProgressbar
+                value={porcentaje}
+                styles={buildStyles({
+                  pathColor: porcentaje > 100 ? '#DC2626' : '#2563eb',
+                  trailColor: '#334155',
+                  textColor: porcentaje > 100 ? '#DC2626' : '#2563eb',
+                  pathTransitionDuration: 1.5,
+                })}
+                text={`${porcentaje}% Gastado`}
+              />
+            </div>
+          </div>
+          
+          <div className="space-y-6">
+            <button 
+              className="btn-danger w-full flex items-center justify-center gap-2 mb-6" 
+              type="button" 
+              onClick={handleResetApp}
+            >
+              <RotateCcw className="w-5 h-5" />
+              Resetear App
+            </button>
+            
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-slate-700 rounded-lg border border-slate-600">
+                <div className="flex items-center gap-3">
+                  <Wallet className="w-6 h-6 text-blue-400" />
+                  <span className="text-gray-300 font-semibold">Presupuesto:</span>
+                </div>
+                <span className="text-blue-400 font-bold text-xl">{formatearCantidad(presupuesto)}</span>
+              </div>
+              
+              <div className={`flex items-center justify-between p-4 rounded-lg border ${
+                disponible < 0 
+                  ? 'bg-red-900/20 border-red-600 text-red-400' 
+                  : 'bg-green-900/20 border-green-600 text-green-400'
+              }`}>
+                <div className="flex items-center gap-3">
+                  {disponible < 0 ? (
+                    <TrendingDown className="w-6 h-6" />
+                  ) : (
+                    <TrendingUp className="w-6 h-6" />
+                  )}
+                  <span className="font-semibold">Disponible:</span>
+                </div>
+                <span className="font-bold text-xl">{formatearCantidad(disponible)}</span>
+              </div>
+              
+              <div className="flex items-center justify-between p-4 bg-orange-900/20 rounded-lg border border-orange-600">
+                <div className="flex items-center gap-3">
+                  <TrendingDown className="w-6 h-6 text-orange-400" />
+                  <span className="text-orange-400 font-semibold">Gastado:</span>
+                </div>
+                <span className="text-orange-400 font-bold text-xl">{formatearCantidad(gastado)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
